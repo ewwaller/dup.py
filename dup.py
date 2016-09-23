@@ -40,7 +40,8 @@ try:
     exifAvailable=True
 except ImportError:
     exifAvailable=False
-
+except ValueError:
+    exifAvailable=False
 theDatabase = None
 BLOCKSIZE = 65536
 DRY_RUN = None
@@ -287,7 +288,7 @@ class Database:
             returns: None.
         """
         if not exifAvailable:
-            logging.warning("Exif operations not available? Is GExiv2 installed")
+            logging.warning("Exif operations not available. Is GExiv2 installed?")
             return
         logging.info("Obtaining exif data for all hashes in the database")
         cur = self.con.cursor()
