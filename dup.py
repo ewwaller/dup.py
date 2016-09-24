@@ -31,8 +31,9 @@ from argparse import ArgumentParser
 import sqlite3
 try:
     import argcomplete
+    argcompleteAvailable=True
 except ImportError:
-    pass
+    argcompleteAvailable=False
 try:
     import gi
     gi.require_version('GExiv2', '0.10')
@@ -631,7 +632,7 @@ def main():
 
     global theDatabase
     global DRY_RUN
-
+    global argcompleteAvailable 
     # Handle all the command line nonsense.
 
     description = "Manage duplicate files"
@@ -639,7 +640,8 @@ def main():
     for x in theParameters:
         if x[2]: parser.add_argument(x[2] ,x[3], action=x[1], dest=x[0], help=x[5], default=x[6])
         else: parser.add_argument(x[3], action=x[1], dest=x[0], help=x[5], default=x[6])
-    argcomplete.autocomplete(parser)
+    if argcompleteAvailable:
+        argcomplete.autocomplete(parser)
     args = parser.parse_args()
     DRY_RUN = args.dryrun
     [x[4](getattr(args, x[0])) for x in theParameters if x[4] and getattr(args, x[0])]
